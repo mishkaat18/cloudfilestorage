@@ -27,7 +27,7 @@
                 {% endfor %}
             {% endwith %}
 
-            <form method="post">
+            <form method="post" class="auth-form">
                 <label for="email">Email address</label>
                 <input id="email" type="email" name="email"
                        autocomplete="email" required>
@@ -38,7 +38,7 @@
                        autocomplete="{{ 'new-password' if mode == 'register' else 'current-password' }}"
                        required>
 
-                <button type="submit" style="width: 100%;">
+                <button type="submit" class="primary-button">
                     {{ 'Create account' if mode == 'register' else 'Log in' }}
                 </button>
             </form>
