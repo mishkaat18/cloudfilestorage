@@ -56,9 +56,9 @@ https://github.com/mishkaat18/cloudfilestorage
 4. Create a `.env` file in the project root with the following variables:
 
    ```env
-   SUPABASE_URL=your_supabase_project_url
-   SUPABASE_KEY=your_supabase_publishable_key
-   FLASK_SECRET_KEY=your_random_secret_key
+   SUPABASE_URL = https://tbpikowqzqnvsefziaod.supabase.co
+   SUPABASE_KEY = sb_publishable_0nOCtsoPwzJO4K4K1-JhzQ_2_79dV-V
+   FLASK_SECRET_KEY = 1c69bf2f521cf0e0af24ceafe0b3cc08f3f808b172baab0f48683492f2959f60
    ```
 
 5. Configure the Supabase project, database table, private storage bucket, and access policies according to your application configuration.
