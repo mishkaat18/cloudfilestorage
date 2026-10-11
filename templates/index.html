@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudVault — Your Personal File Space</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="nav-container">
+            <a href="{{ url_for('index') }}" class="brand">
+                <span class="brand-icon">☁</span> CloudVault
+            </a>
+
+            <div class="nav-user">
+                <span class="user-email">{{ user_email }}</span>
+                <form action="{{ url_for('logout') }}" method="POST">
+                    <button type="submit" class="logout-button">Log out</button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <p class="eyebrow">YOUR PERSONAL FILE SPACE</p>
+            <h1>Store it. Find it. Keep it safe.</h1>
+            <p class="subtitle">Manage your files from one simple dashboard.</p>
+        </section>
+
+        <section class="stats-grid">
+            <article class="stat-card">
+                <p>Total files</p>
+                <h2>{{ total_files }}</h2>
+            </article>
+
+            <article class="stat-card">
+                <p>Storage used</p>
+                <h2>
+                    {% if total_bytes >= 1048576 %}
+                        {{ "%.2f"|format(total_bytes / 1048576) }} MB
+                    {% elif total_bytes >= 1024 %}
+                        {{ "%.2f"|format(total_bytes / 1024) }} KB
+                    {% else %}
+                        {{ total_bytes }} B
+                    {% endif %}
+                </h2>
+            </article>
+        </section>
+
+        <section class="panel upload-panel">
+            <h2>Upload a file</h2>
+            <p class="helper-text">Maximum file size: 10 MB</p>
+
+            <form action="{{ url_for('upload') }}"
+                  method="POST"
+                  enctype="multipart/form-data"
+                  class="upload-form">
+
+                <label for="file" class="sr-only">Choose a file</label>
+                <input
+                    type="file"
+                    id="file"
+                    name="file"
+                    required
+                >
+
+                <button type="submit" class="primary-button">
+                    Upload file ↑
+                </button>
+            </form>
+        </section>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <section class="flash-messages" aria-live="polite">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </section>
+            {% endif %}
+        {% endwith %}
+
+        <section class="panel files-panel">
+            <div class="section-heading">
+                <h2>Your files</h2>
+                <span class="item-count">
+                    {{ total_files }} {{ 'item' if total_files == 1 else 'items' }}
+                </span>
+            </div>
+
+            {% if files %}
+                <div class="file-list">
+                    {% for file in files %}
+                        <article class="file-row">
+                            <div class="file-icon" aria-hidden="true">▤</div>
+
+                            <div class="file-info">
+                                <h3 class="file-name">{{ file.file_name }}</h3>
+                                <p class="file-size">
+                                    {% if file.file_size >= 1048576 %}
+                                        {{ "%.2f"|format(file.file_size / 1048576) }} MB
+                                    {% elif file.file_size >= 1024 %}
+                                        {{ "%.2f"|format(file.file_size / 1024) }} KB
+                                    {% else %}
+                                        {{ file.file_size }} B
+                                    {% endif %}
+                                </p>
+                            </div>
+
+                            <div class="file-actions">
+                                <a
+                                    class="download"
+                                    href="{{ url_for('download', file_id=file.id) }}"
+                                >
+                                    Download
+                                </a>
+
+                                <form
+                                    action="{{ url_for('delete', file_id=file.id) }}"
+                                    method="POST"
+                                    onsubmit="return confirm('Delete this file?');"
+                                >
+                                    <button type="submit" class="delete">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon" aria-hidden="true">☁</div>
+                    <h3>Your vault is empty</h3>
+                    <p>Upload your first file to get started.</p>
+                </div>
+            {% endif %}
+        </section>
+
+        <footer class="footer">
+            CloudVault · Cloud File Storage App · Internship Project
+        </footer>
+    </main>
+</body>
+</html>

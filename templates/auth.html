@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ 'Register' if mode == 'register' else 'Login' }} | CloudVault</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="container">
+        <section class="panel" style="max-width: 460px; margin: 70px auto;">
+            <a class="brand" href="/">☁ CloudVault</a>
+
+            <h1 style="font-size: 28px; margin-top: 28px;">
+                {{ 'Create your account' if mode == 'register' else 'Welcome back' }}
+            </h1>
+
+            <p class="muted">
+                {{ 'Create an account to store your files securely.' if mode == 'register'
+                   else 'Log in to access your private files.' }}
+            </p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
+
+            <form method="post">
+                <label for="email">Email address</label>
+                <input id="email" type="email" name="email"
+                       autocomplete="email" required>
+
+                <label for="password">Password</label>
+                <input id="password" type="password" name="password"
+                       minlength="8"
+                       autocomplete="{{ 'new-password' if mode == 'register' else 'current-password' }}"
+                       required>
+
+                <button type="submit" style="width: 100%;">
+                    {{ 'Create account' if mode == 'register' else 'Log in' }}
+                </button>
+            </form>
+
+            <p style="margin-top: 22px;">
+                {% if mode == 'register' %}
+                    Already registered? <a href="{{ url_for('login') }}">Log in</a>
+                {% else %}
+                    New to CloudVault? <a href="{{ url_for('register') }}">Create an account</a>
+                {% endif %}
+            </p>
+        </section>
+    </main>
+</body>
+</html>
